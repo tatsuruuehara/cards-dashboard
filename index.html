@@ -960,12 +960,24 @@ const wbsExcluded  = _loadExcluded('wbsFilter');
 // ──────────────────────────────
 // データ取得
 // ──────────────────────────────
-function loadData() {
+function loadData(silent) {
   const btn = document.getElementById('refreshBtn');
-  // icon removed
   btn.classList.add('loading');
-  icon.innerHTML = '<span class="spinner"></span>';
   showBanner('');
+
+  // キャッシュを即座に表示（初回のみ）
+  if (!silent) {
+    try {
+      const cached = localStorage.getItem('tasksCache');
+      const cachedAt = localStorage.getItem('tasksCacheAt');
+      if (cached && cachedAt) {
+        allTasks = JSON.parse(cached);
+        document.getElementById('lastUpdated').textContent =
+          `キャッシュ: ${new Date(Number(cachedAt)).toLocaleTimeString('ja-JP')} ／ 更新中...`;
+        init();
+      }
+    } catch(_) {}
+  }
 
   const cbName = '_cb_' + Date.now();
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json;responseHandler:${cbName}&gid=${GID}&nocache=${Date.now()}`;
@@ -992,8 +1004,12 @@ function loadData() {
       if (json.status !== 'ok') throw new Error(json.errors?.[0]?.message || 'エラー');
       const rawRows = json.table.rows.length;
       allTasks = parseGviz(json.table);
+      try {
+        localStorage.setItem('tasksCache', JSON.stringify(allTasks));
+        localStorage.setItem('tasksCacheAt', Date.now().toString());
+      } catch(_) {}
       document.getElementById('lastUpdated').textContent =
-        `最終更新: ${new Date().toLocaleTimeString('ja-JP')}  (取得行数: ${rawRows} / タスク数: ${allTasks.length})`;
+        `最終更新: ${new Date().toLocaleTimeString('ja-JP')}  (${allTasks.length}件)`;
       console.log('[Dashboard] raw rows:', rawRows, 'parsed tasks:', allTasks.length);
       console.table(allTasks);
       init();
