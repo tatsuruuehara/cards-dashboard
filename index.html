@@ -150,7 +150,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Goth
 .kpi-card.k-avghr  .kpi-value { color: #8b5cf6; }
 
 /* Chart cards */
-.charts-row { display: grid; grid-template-columns: 260px 1fr 1fr; gap: 16px; }
+.charts-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 @media (max-width: 1200px) { .charts-row { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 1200px) { .charts-row > .progress-card { grid-column: 1 / -1; order: -1; display: grid; grid-template-columns: auto 1fr; gap: 0; } }
 @media (max-width: 1200px) { .charts-row > .progress-card .progress-overall { border-bottom: none; border-right: 1px solid var(--border); padding: 16px 24px; margin-bottom: 0; } }
@@ -177,7 +177,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Goth
 .person-progress-fill { height: 100%; border-radius: 99px; transition: width .5s ease; }
 .chart-card { background: var(--surface); border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 0 0 1px var(--border); padding: 20px; }
 .chart-card h3 { font-size: 12px; font-weight: 700; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text2); text-transform: uppercase; letter-spacing: .05em; }
-.chart-wrap { overflow-y: auto; overflow-x: hidden; max-height: 380px; }
+.chart-wrap { overflow-y: auto; overflow-x: hidden; max-height: 400px; }
 .chart-inner { position: relative; width: 100%; min-height: 280px; }
 
 /* Table card */
@@ -357,7 +357,7 @@ tbody td { padding: 11px 16px; font-size: 13px; vertical-align: middle; }
       使い方
     </button>
     <button class="refresh-btn" id="refreshBtn" onclick="loadData()">
-      <span id="refreshIcon">↻</span> 更新
+      更新
     </button>
   </div>
 </header>
@@ -371,86 +371,68 @@ tbody td { padding: 11px 16px; font-size: 13px; vertical-align: middle; }
     </div>
     <div style="overflow-y:auto;padding:20px 24px;line-height:1.75;font-size:14px">
 
-      <h3 style="margin:0 0 8px;font-size:15px;color:var(--primary)">概要</h3>
-      <p style="margin:0 0 16px">GoogleスプレッドシートをDBに、Google Apps Script（GAS）をAPIとして動くチーム向けタスク管理ダッシュボードです。</p>
+      <p style="margin:0 0 20px;color:var(--text2);font-size:13px">Googleスプレッドシートをデータベースに、GASをAPIとして動作するタスク管理ダッシュボードです。</p>
 
-      <h3 style="margin:0 0 8px;font-size:15px;color:var(--primary)">データ構造（スプレッドシート列）</h3>
-      <table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px">
-        <thead><tr style="background:var(--surface2)"><th style="padding:6px 10px;text-align:left;border:1px solid var(--border)">列</th><th style="padding:6px 10px;text-align:left;border:1px solid var(--border)">内容</th></tr></thead>
-        <tbody>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">B</td><td style="padding:5px 10px;border:1px solid var(--border)">No.（自動採番）</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">C</td><td style="padding:5px 10px;border:1px solid var(--border)">記載日</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">D</td><td style="padding:5px 10px;border:1px solid var(--border)">カテゴリ</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">E</td><td style="padding:5px 10px;border:1px solid var(--border)">ステータス</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">F</td><td style="padding:5px 10px;border:1px solid var(--border)">タスク内容</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">G</td><td style="padding:5px 10px;border:1px solid var(--border)">詳細</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">H</td><td style="padding:5px 10px;border:1px solid var(--border)">期限日</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">I</td><td style="padding:5px 10px;border:1px solid var(--border)">実働時間(h)</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">J</td><td style="padding:5px 10px;border:1px solid var(--border)">完了日</td></tr>
-          <tr><td style="padding:5px 10px;border:1px solid var(--border)">K</td><td style="padding:5px 10px;border:1px solid var(--border)">担当者</td></tr>
-        </tbody>
-      </table>
+      <div style="display:flex;flex-direction:column;gap:8px">
 
-      <h3 style="margin:0 0 10px;font-size:15px;color:var(--primary)">タブ別機能</h3>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div style="background:var(--primary);color:#fff;padding:10px 16px;font-weight:700;font-size:13px">タスクタブ — 日々のタスク管理</div>
+          <div style="padding:12px 16px;font-size:13px">
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:start">
+              <span style="color:var(--primary);font-weight:700;white-space:nowrap">追加</span><span>右上「＋タスク追加」ボタン → フォームに入力して保存</span>
+              <span style="color:var(--primary);font-weight:700;white-space:nowrap">編集</span><span>タスクカードの鉛筆アイコン or ステータスバッジをクリック</span>
+              <span style="color:var(--primary);font-weight:700;white-space:nowrap">絞込み</span><span>担当者・カテゴリ・ステータスのドロップダウン、またはテキスト検索</span>
+              <span style="color:var(--primary);font-weight:700;white-space:nowrap">KPI</span><span>総タスク / 完了 / 進行中 / 未着手 / 期限超過を上部カードで確認</span>
+            </div>
+          </div>
+        </div>
 
-      <details open style="margin-bottom:10px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
-        <summary style="font-weight:700;cursor:pointer">タスクタブ</summary>
-        <ul style="margin:8px 0 0 0;padding-left:18px">
-          <li>KPIカード: 総タスク / 完了 / 進行中 / 未着手 / 期限超過</li>
-          <li>担当者別・カテゴリ別グラフ</li>
-          <li>「＋タスク追加」で新規タスクをスプレッドシートに追加</li>
-          <li>タスクカードのステータスバッジ or 鉛筆アイコンで編集・削除</li>
-          <li>担当者・カテゴリ・ステータスでフィルタリング＆テキスト検索</li>
-        </ul>
-      </details>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div style="background:#4f7096;color:#fff;padding:10px 16px;font-weight:700;font-size:13px">WBSタブ — スケジュール・ECイベント確認</div>
+          <div style="padding:12px 16px;font-size:13px">
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:start">
+              <span style="color:#4f7096;font-weight:700;white-space:nowrap">ガントチャート</span><span>タスクの期限日をカレンダー上のバーで表示</span>
+              <span style="color:#4f7096;font-weight:700;white-space:nowrap">ECカレンダー</span><span>楽天（赤）・Amazon（黄）のイベント期間をWBS上部に表示</span>
+              <span style="color:#4f7096;font-weight:700;white-space:nowrap">表示調整</span><span>左上の日付で開始日を変更 / スライダーで列幅を調整</span>
+            </div>
+          </div>
+        </div>
 
-      <details style="margin-bottom:10px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
-        <summary style="font-weight:700;cursor:pointer">WBSタブ</summary>
-        <ul style="margin:8px 0 0 0;padding-left:18px">
-          <li>ガントチャート形式でタスクの期限日を表示</li>
-          <li>上部にRakuten・AmazonのECイベントカレンダーを表示（赤系=楽天、黄系=Amazon）</li>
-          <li>左上の日付ピッカーで表示開始日を変更</li>
-          <li>列幅スライダーで1セルの幅を調整</li>
-        </ul>
-      </details>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div style="background:#4a154b;color:#fff;padding:10px 16px;font-weight:700;font-size:13px">業務報告タブ — Slack投稿</div>
+          <div style="padding:12px 16px;font-size:13px">
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:start">
+              <span style="color:#4a154b;font-weight:700;white-space:nowrap">手順</span><span>日付を選択 → 「サマリー生成」で当日のタスクを集計 → 「Slack投稿」</span>
+              <span style="color:#4a154b;font-weight:700;white-space:nowrap">スレッド</span><span>同日に業務報告済みの場合、自動でスレッド返信になる</span>
+            </div>
+          </div>
+        </div>
 
-      <details style="margin-bottom:10px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
-        <summary style="font-weight:700;cursor:pointer">業務報告タブ</summary>
-        <ul style="margin:8px 0 0 0;padding-left:18px">
-          <li>日付を選択して「サマリー生成」→ 当日のタスク状況を自動集計</li>
-          <li>「Slack投稿」で指定チャンネルに投稿</li>
-          <li>同日の業務報告スレッドがある場合は自動でスレッド返信</li>
-        </ul>
-      </details>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div style="background:#b45309;color:#fff;padding:10px 16px;font-weight:700;font-size:13px">オートメーションタブ — 定期タスクの自動生成</div>
+          <div style="padding:12px 16px;font-size:13px">
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:start">
+              <span style="color:#b45309;font-weight:700;white-space:nowrap">テンプレート</span><span>タスク名・カテゴリ・繰り返し条件を登録して定期生成</span>
+              <span style="color:#b45309;font-weight:700;white-space:nowrap">ECイベント連動</span><span>繰り返しに「ECイベントごと」を選択するとイベントに合わせて自動スケジュール</span>
+              <span style="color:#b45309;font-weight:700;white-space:nowrap">日程ルール</span><span>記載日 = イベント開始の5営業日前 / 期限 = 2営業日前</span>
+              <span style="color:#b45309;font-weight:700;white-space:nowrap">×5,0日</span><span>マラソン / スーパーSALE期間中で日付が5か0で終わる最初の日</span>
+            </div>
+          </div>
+        </div>
 
-      <details style="margin-bottom:10px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
-        <summary style="font-weight:700;cursor:pointer">オートメーションタブ</summary>
-        <ul style="margin:8px 0 0 0;padding-left:18px">
-          <li>定期タスクのテンプレートを登録して自動 or 手動で一括生成</li>
-          <li>繰り返し: 毎日 / 毎週 / 毎月 / 毎年 / ECイベントごと</li>
-          <li><strong>ECイベント連動</strong>: イベント開始の<strong>5営業日前</strong>が記載日、<strong>2営業日前</strong>が期限日</li>
-          <li>マラソン×5,0日 / スーパーSALE×5,0日: イベント期間中で日付が5か0の最初の日</li>
-        </ul>
-      </details>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div style="background:#374151;color:#fff;padding:10px 16px;font-weight:700;font-size:13px">管理者タブ — 初期パスワード: admin</div>
+          <div style="padding:12px 16px;font-size:13px">
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:start">
+              <span style="color:#374151;font-weight:700;white-space:nowrap">カテゴリ</span><span>タスクのカテゴリと色を追加・編集・削除</span>
+              <span style="color:#374151;font-weight:700;white-space:nowrap">担当者</span><span>メンバーを追加・削除（タスクの担当者選択肢に反映）</span>
+              <span style="color:#374151;font-weight:700;white-space:nowrap">ECイベント</span><span>楽天・Amazonのイベント期間を管理（WBSと自動化スケジュールに反映）</span>
+              <span style="color:#374151;font-weight:700;white-space:nowrap">PW変更</span><span>管理者パスワードを変更（ブラウザのlocalStorageに保存）</span>
+            </div>
+          </div>
+        </div>
 
-      <details style="margin-bottom:16px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
-        <summary style="font-weight:700;cursor:pointer">管理者タブ（初期パスワード: admin）</summary>
-        <ul style="margin:8px 0 0 0;padding-left:18px">
-          <li>カテゴリ管理: 名前・カラーの追加・編集・削除</li>
-          <li>担当者管理: メンバーの追加・削除</li>
-          <li>ECイベント設定: 楽天・AmazonイベントのWBS表示と自動化スケジュールを管理（スクロール可）</li>
-          <li>パスワード変更（localStorageに保存）</li>
-        </ul>
-      </details>
-
-      <h3 style="margin:0 0 8px;font-size:15px;color:var(--primary)">初期セットアップ（管理者）</h3>
-      <ol style="margin:0 0 0 0;padding-left:18px">
-        <li>GoogleスプレッドシートをA〜K列で準備</li>
-        <li><code style="background:var(--surface2);padding:1px 5px;border-radius:4px">gas/apps-script-template.gs</code> をApps Scriptに貼り付け</li>
-        <li>Slack認証情報を書き換えてウェブアプリとしてデプロイ</li>
-        <li><code style="background:var(--surface2);padding:1px 5px;border-radius:4px">index.html</code> 内の <code style="background:var(--surface2);padding:1px 5px;border-radius:4px">GAS_URL</code> をデプロイURLに更新</li>
-        <li>GitHubにpushしてGitHub Pagesを有効化</li>
-      </ol>
+      </div>
 
     </div>
   </div>
@@ -747,7 +729,7 @@ tbody td { padding: 11px 16px; font-size: 13px; vertical-align: middle; }
           <select id="adminPersonFilter" onchange="renderAdminTab()" class="filter-select" style="max-width:160px;flex:none"><option value="">全担当者</option></select>
           <button class="clear-btn" onclick="adminClearFilters()">クリア</button>
           <div style="flex:1"></div>
-          <button class="clear-btn" onclick="adminLogout()" style="color:var(--danger);border-color:var(--danger)">ログアウト</button>
+          <button onclick="adminLogout()" style="background:var(--danger);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer">ログアウト</button>
         </div>
       </div>
 
@@ -980,7 +962,7 @@ const wbsExcluded  = _loadExcluded('wbsFilter');
 // ──────────────────────────────
 function loadData() {
   const btn = document.getElementById('refreshBtn');
-  const icon = document.getElementById('refreshIcon');
+  // icon removed
   btn.classList.add('loading');
   icon.innerHTML = '<span class="spinner"></span>';
   showBanner('');
@@ -1001,7 +983,7 @@ function loadData() {
     if (s) s.remove();
     clearTimeout(timer);
     btn.classList.remove('loading');
-    icon.textContent = '↻';
+    // icon reset
   }
 
   window[cbName] = function(json) {
@@ -1848,10 +1830,8 @@ function renderWBS(tasks, groupBy = 'category') {
   let currentTopPx = SECTION_HEAD_H;
 
   // タスクセクションヘッダー行
-  const taskHeadTCells = days.map(d =>
-    `<div class="wbs-tcell" style="width:${COL_W}px;height:${SECTION_HEAD_H}px;background:#7c8fa1"></div>`
-  ).join('');
-  timelineRowsHTML += `<div class="wbs-trow ec-head" style="height:${SECTION_HEAD_H}px">${taskHeadTCells}</div>`;
+  const taskHeadSpan = `<div style="width:${totalW}px;height:${SECTION_HEAD_H}px;background:#7c8fa1;display:flex;align-items:center;padding:0 16px;color:#fff;font-size:11px;font-weight:800;letter-spacing:.12em">TASKS</div>`;
+  timelineRowsHTML += `<div class="wbs-trow ec-head" style="height:${SECTION_HEAD_H}px">${taskHeadSpan}</div>`;
 
   groups.forEach(g => {
     const CAT_H = 34, ROW_H = 40;
@@ -1909,9 +1889,7 @@ function renderWBS(tasks, groupBy = 'category') {
   const ecOffset = ecRows.rowHeight;
   let barsHTML = barDefs.map(b => {
     const classes = ['wbs-bar', b.overdue ? 'overdue' : '', b.done ? 'done' : ''].filter(Boolean).join(' ');
-    const bg = b.done
-      ? `background: repeating-linear-gradient(45deg,${b.color},${b.color} 5px,${b.color}bb 5px,${b.color}bb 10px)`
-      : `background:${b.color}`;
+    const bg = `background:${b.color}${b.done ? 'aa' : ''}`;
     return `<div class="${classes}" style="top:${b.top + ecOffset}px;left:${b.left}px;width:${b.width}px;height:${b.height}px;${bg}" title="${esc(b.tooltip)}" data-task-idx="${b.taskIdx}" data-si="${b.si}" data-ei="${b.ei}">
       <div class="wbs-rh left"></div>
       <span class="wbs-bar-text">${esc(b.text)}</span>
@@ -3709,11 +3687,10 @@ function buildEcEventRows(days, COL_W) {
 
   // セクションヘッダー行
   const HEAD_H = 30;
-  const headTCells = days.map(d =>
-    `<div class="wbs-tcell" style="width:${COL_W}px;height:${HEAD_H}px;background:#7c8fa1"></div>`
-  ).join('');
+  const ecTotalW = days.length * COL_W;
+  const headSpan = `<div style="width:${ecTotalW}px;height:${HEAD_H}px;background:#7c8fa1;display:flex;align-items:center;padding:0 16px;color:#fff;font-size:11px;font-weight:800;letter-spacing:.12em">EC EVENTS</div>`;
   const headLabel    = `<div class="wbs-row-label ec-head" style="height:${HEAD_H}px">EC EVENTS</div>`;
-  const headTimeline = `<div class="wbs-trow ec-head" style="height:${HEAD_H}px">${headTCells}</div>`;
+  const headTimeline = `<div class="wbs-trow ec-head" style="height:${HEAD_H}px">${headSpan}</div>`;
 
   return {
     labelHTML:    headLabel + rakuten.labelHTML + amazon.labelHTML,
