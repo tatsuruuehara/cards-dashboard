@@ -1,0 +1,9 @@
+# Claude settings (may contain API keys)
+.claude/
+
+# GAS script contains Slack credentials - NEVER commit the real file
+task-dashboard/apps-script.gs
+
+# OS
+.DS_Store
+Thumbs.db
