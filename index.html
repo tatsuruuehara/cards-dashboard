@@ -1905,7 +1905,7 @@ function renderWBS(tasks, groupBy = 'category') {
   const ecOffset = ecRows.rowHeight;
   let barsHTML = barDefs.map(b => {
     const classes = ['wbs-bar', b.overdue ? 'overdue' : '', b.done ? 'done' : ''].filter(Boolean).join(' ');
-    const bg = `background:${b.color}${b.done ? 'aa' : ''}`;
+    const bg = `background:${b.color}`;
     return `<div class="${classes}" style="top:${b.top + ecOffset}px;left:${b.left}px;width:${b.width}px;height:${b.height}px;${bg}" title="${esc(b.tooltip)}" data-task-idx="${b.taskIdx}" data-si="${b.si}" data-ei="${b.ei}">
       <div class="wbs-rh left"></div>
       <span class="wbs-bar-text">${esc(b.text)}</span>
