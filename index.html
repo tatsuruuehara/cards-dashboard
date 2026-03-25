@@ -1955,12 +1955,17 @@ function renderWBS(tasks, groupBy = 'category') {
   }
 }
 
+let _bannerTimer = null;
 function showBanner(msg, type='error') {
   const el = document.getElementById('statusBanner');
+  if (_bannerTimer) { clearTimeout(_bannerTimer); _bannerTimer = null; }
   if (!msg) { el.style.display='none'; return; }
   el.className = `status-banner ${type}`;
   el.textContent = msg;
   el.style.display = 'block';
+  if (type === 'success') {
+    _bannerTimer = setTimeout(() => { el.style.display='none'; }, 2000);
+  }
 }
 
 function demo() {
@@ -3576,12 +3581,13 @@ function _renderEcTable(type, tableId) {
     // 固定定義のカラーを使用（表示ラベルで照合）
     const def = eventDefs.find(d => d.display === e.label) || eventDefs.find(d => d.keywords.some(kw => e.label.includes(kw)));
     const color = def ? def.color : e.color;
-    const rowBg = `${color}12`; // 薄い背景でカラー分け
+    const rowBg = `${color}12`;
+    const dateInpSt = `border:1px solid transparent;border-radius:6px;padding:3px 6px;font-size:12px;font-family:inherit;background:transparent;color:var(--text);cursor:pointer;width:110px;box-sizing:border-box`;
     return `<tr style="border-left:3px solid ${color};background:${rowBg}">
       <td style="padding:6px 10px"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:${color};vertical-align:middle"></span></td>
       <td style="font-size:13px;padding:6px 10px;font-weight:600;color:${color}">${esc(e.label)}</td>
-      <td style="font-size:13px;padding:6px 10px">${e.start}</td>
-      <td style="font-size:13px;padding:6px 10px">${e.end || e.start}</td>
+      <td style="padding:3px 6px"><input type="date" value="${e.start}" style="${dateInpSt}" onmouseover="this.style.border='1px solid var(--border)'" onmouseout="this.style.border='1px solid transparent'" onchange="updateEcEventDate(${e.gIdx},'start',this.value)"></td>
+      <td style="padding:3px 6px"><input type="date" value="${e.end || e.start}" style="${dateInpSt}" onmouseover="this.style.border='1px solid var(--border)'" onmouseout="this.style.border='1px solid transparent'" onchange="updateEcEventDate(${e.gIdx},'end',this.value)"></td>
       <td style="padding:4px 6px">
         <button class="clear-btn" style="font-size:11px;padding:2px 8px;color:var(--danger);border-color:var(--danger)" onclick="deleteEcEvent(${e.gIdx})">削除</button>
       </td>
@@ -3627,6 +3633,16 @@ function submitEcEvent(type) {
   saveEcEvents(evs);
   renderEcEventPanel();
   applyWbsFilter();
+}
+
+function updateEcEventDate(gIdx, field, value) {
+  if (!value) return;
+  const evs = loadEcEvents();
+  if (!evs[gIdx]) return;
+  evs[gIdx][field] = value;
+  saveEcEvents(evs);
+  applyWbsFilter();
+  showBanner('日付を更新しました', 'success');
 }
 
 function deleteEcEvent(gIdx) {
