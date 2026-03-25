@@ -353,11 +353,108 @@ tbody td { padding: 11px 16px; font-size: 13px; vertical-align: middle; }
   </div>
   <div class="header-right">
     <span class="last-updated" id="lastUpdated">読み込み中...</span>
+    <button class="refresh-btn" style="background:var(--surface2);color:var(--text);border:1px solid var(--border)" onclick="document.getElementById('manualModal').style.display='flex'">
+      ❓ 使い方
+    </button>
     <button class="refresh-btn" id="refreshBtn" onclick="loadData()">
       <span id="refreshIcon">↻</span> 更新
     </button>
   </div>
 </header>
+
+<!-- ===== MANUAL MODAL ===== -->
+<div id="manualModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--surface);border-radius:16px;max-width:760px;width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div style="padding:20px 24px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <h2 style="margin:0;font-size:18px">📖 CARDSダッシュボード 使い方ガイド</h2>
+      <button onclick="document.getElementById('manualModal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text2);line-height:1">✕</button>
+    </div>
+    <div style="overflow-y:auto;padding:20px 24px;line-height:1.75;font-size:14px">
+
+      <h3 style="margin:0 0 8px;font-size:15px;color:var(--primary)">概要</h3>
+      <p style="margin:0 0 16px">GoogleスプレッドシートをDBに、Google Apps Script（GAS）をAPIとして動くチーム向けタスク管理ダッシュボードです。</p>
+
+      <h3 style="margin:0 0 8px;font-size:15px;color:var(--primary)">データ構造（スプレッドシート列）</h3>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px">
+        <thead><tr style="background:var(--surface2)"><th style="padding:6px 10px;text-align:left;border:1px solid var(--border)">列</th><th style="padding:6px 10px;text-align:left;border:1px solid var(--border)">内容</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">B</td><td style="padding:5px 10px;border:1px solid var(--border)">No.（自動採番）</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">C</td><td style="padding:5px 10px;border:1px solid var(--border)">記載日</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">D</td><td style="padding:5px 10px;border:1px solid var(--border)">カテゴリ</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">E</td><td style="padding:5px 10px;border:1px solid var(--border)">ステータス</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">F</td><td style="padding:5px 10px;border:1px solid var(--border)">タスク内容</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">G</td><td style="padding:5px 10px;border:1px solid var(--border)">詳細</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">H</td><td style="padding:5px 10px;border:1px solid var(--border)">期限日</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">I</td><td style="padding:5px 10px;border:1px solid var(--border)">実働時間(h)</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">J</td><td style="padding:5px 10px;border:1px solid var(--border)">完了日</td></tr>
+          <tr><td style="padding:5px 10px;border:1px solid var(--border)">K</td><td style="padding:5px 10px;border:1px solid var(--border)">担当者</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin:0 0 10px;font-size:15px;color:var(--primary)">タブ別機能</h3>
+
+      <details open style="margin-bottom:10px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
+        <summary style="font-weight:700;cursor:pointer">タスクタブ</summary>
+        <ul style="margin:8px 0 0 0;padding-left:18px">
+          <li>KPIカード: 総タスク / 完了 / 進行中 / 未着手 / 期限超過</li>
+          <li>担当者別・カテゴリ別グラフ</li>
+          <li>「＋タスク追加」で新規タスクをスプレッドシートに追加</li>
+          <li>タスクカードのステータスバッジ or 鉛筆アイコンで編集・削除</li>
+          <li>担当者・カテゴリ・ステータスでフィルタリング＆テキスト検索</li>
+        </ul>
+      </details>
+
+      <details style="margin-bottom:10px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
+        <summary style="font-weight:700;cursor:pointer">WBSタブ</summary>
+        <ul style="margin:8px 0 0 0;padding-left:18px">
+          <li>ガントチャート形式でタスクの期限日を表示</li>
+          <li>上部にRakuten・AmazonのECイベントカレンダーを表示（赤系=楽天、黄系=Amazon）</li>
+          <li>左上の日付ピッカーで表示開始日を変更</li>
+          <li>列幅スライダーで1セルの幅を調整</li>
+        </ul>
+      </details>
+
+      <details style="margin-bottom:10px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
+        <summary style="font-weight:700;cursor:pointer">業務報告タブ</summary>
+        <ul style="margin:8px 0 0 0;padding-left:18px">
+          <li>日付を選択して「サマリー生成」→ 当日のタスク状況を自動集計</li>
+          <li>「Slack投稿」で指定チャンネルに投稿</li>
+          <li>同日の業務報告スレッドがある場合は自動でスレッド返信</li>
+        </ul>
+      </details>
+
+      <details style="margin-bottom:10px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
+        <summary style="font-weight:700;cursor:pointer">オートメーションタブ</summary>
+        <ul style="margin:8px 0 0 0;padding-left:18px">
+          <li>定期タスクのテンプレートを登録して自動 or 手動で一括生成</li>
+          <li>繰り返し: 毎日 / 毎週 / 毎月 / 毎年 / ECイベントごと</li>
+          <li><strong>ECイベント連動</strong>: イベント開始の<strong>5営業日前</strong>が記載日、<strong>2営業日前</strong>が期限日</li>
+          <li>マラソン×5,0日 / スーパーSALE×5,0日: イベント期間中で日付が5か0の最初の日</li>
+        </ul>
+      </details>
+
+      <details style="margin-bottom:16px;border:1px solid var(--border);border-radius:8px;padding:10px 14px">
+        <summary style="font-weight:700;cursor:pointer">管理者タブ（初期パスワード: admin）</summary>
+        <ul style="margin:8px 0 0 0;padding-left:18px">
+          <li>カテゴリ管理: 名前・カラーの追加・編集・削除</li>
+          <li>担当者管理: メンバーの追加・削除</li>
+          <li>ECイベント設定: 楽天・AmazonイベントのWBS表示と自動化スケジュールを管理（スクロール可）</li>
+          <li>パスワード変更（localStorageに保存）</li>
+        </ul>
+      </details>
+
+      <h3 style="margin:0 0 8px;font-size:15px;color:var(--primary)">初期セットアップ（管理者）</h3>
+      <ol style="margin:0 0 0 0;padding-left:18px">
+        <li>GoogleスプレッドシートをA〜K列で準備</li>
+        <li><code style="background:var(--surface2);padding:1px 5px;border-radius:4px">gas/apps-script-template.gs</code> をApps Scriptに貼り付け</li>
+        <li>Slack認証情報を書き換えてウェブアプリとしてデプロイ</li>
+        <li><code style="background:var(--surface2);padding:1px 5px;border-radius:4px">index.html</code> 内の <code style="background:var(--surface2);padding:1px 5px;border-radius:4px">GAS_URL</code> をデプロイURLに更新</li>
+        <li>GitHubにpushしてGitHub Pagesを有効化</li>
+      </ol>
+
+    </div>
+  </div>
+</div>
 
 <main class="main">
   <div class="status-banner" id="statusBanner"></div>
